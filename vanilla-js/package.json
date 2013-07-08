@@ -1,0 +1,9 @@
+{
+  "name": "hello-world",
+  "description": "vanilla.js server with domains",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "concat-stream": "~1.0.0"
+  }
+}
