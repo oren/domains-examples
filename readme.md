@@ -11,3 +11,10 @@ curl 0.0.0.0:3000/throw
 ```
 
 ## express.js
+
+```
+cd express
+node server
+curl 0.0.0.0:3000/throw
+curl 0.0.0.0:3000/database
+```
