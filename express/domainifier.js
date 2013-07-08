@@ -1,3 +1,5 @@
+"use strict";
+
 // a middleware that wrap the req, res, and the next function in a domain.
 // The idea behind domains is to centralizing the handling of unexpected errors.
 // 
@@ -9,17 +11,17 @@
 var domain = require('domain');
 
 module.exports = function domainifier(req, res, next) {
-    var d = domain.create();
+  var d = domain.create();
 
-    d.on("error", function (error) {
-        console.error("caught %s in main domain, shutting down", error.message);
-        res.end(500, "Unexpected error. Exiting the process");
-        process.exit(1);
-    });
+  d.on("error", function (error) {
+    console.error("caught %s in main domain, shutting down", error.message);
+    res.end(500, "Unexpected error - " + error.message + " Shutting down");
+    process.exit(1);
+  });
 
-    d.add(req);
-    d.add(res);
-    d.add(next);
-    d.run(next);
+  d.add(req);
+  d.add(res);
+  d.add(next);
+  d.run(next);
 };
 

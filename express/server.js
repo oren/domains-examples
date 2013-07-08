@@ -4,7 +4,7 @@ var http         = require("http");
 var domain       = require("domain");
 var path         = require("path");
 var express      = require("express");
-// var domainifier  = require("./domainifier.js");
+var domainifier  = require("./domainifier.js");
 
 function databaseCall() {
   throw new Error("oh no the database exploded");
@@ -12,12 +12,12 @@ function databaseCall() {
 
 var app = express();
 
-app.set("port", process.env.PORT || 1337);
+app.set("port", process.env.PORT || 3000);
 app.set("views", __dirname + "/views");
 app.set("view engine", "jade");
 app.enable('verbose errors');
 // make every request transparently be associated with a domain
-// app.use(domainifier);
+app.use(domainifier);
 app.use(express.favicon());
 app.use(express.logger("dev"));
 app.use(express.bodyParser());
@@ -42,18 +42,6 @@ app.get("/database", function (req, res, next) {
   }, 500);
 });
 
-var mainDomain = domain.create();
-mainDomain.on("error", function (error) {
-  console.error("caught %s in main domain, shutting down", error.message);
-  process.exit(1);
+app.listen(app.get("port"), function () {
+  console.log("Express server listening on port " + app.get("port"));
 });
-
-mainDomain.run(function () {
-  http.createServer(app).listen(app.get("port"), function () {
-    console.log("Express server listening on port " + app.get("port"));
-  });
-});
-
-// http.createServer(app).listen(app.get("port"), function () {
-//   console.log("Express server listening on port " + app.get("port"));
-// });
